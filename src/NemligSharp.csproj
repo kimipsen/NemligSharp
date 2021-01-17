@@ -5,6 +5,9 @@
     <PackageLicenseExpression></PackageLicenseExpression>
     <RepositoryUrl>https://github.com/kimipsen/NemligSharp/</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Copyright>Kim Ipsen</Copyright>
+    <Authors>Kim Ipsen</Authors>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
