@@ -19,7 +19,13 @@ jobs:
         dotnet-version: 5.0.x
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: ./src/
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Release
 #    - name: Test
 #      run: dotnet test --no-build --verbosity normal
+    - name: Publish
+      uses: brandedoutcast/publish-nuget@v2.5.5  
+      with:   
+        PROJECT_FILE_PATH: ./src/NemligSharp.csproj  
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}} 
