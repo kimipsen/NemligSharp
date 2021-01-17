@@ -7,7 +7,8 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Kim Ipsen</Copyright>
     <Authors>Kim Ipsen</Authors>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
+    <Description>A wrapper library for nemlig.com (online grocery shopping).</Description>
   </PropertyGroup>
 
   <ItemGroup>
