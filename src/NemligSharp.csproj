@@ -12,6 +12,7 @@
     <PackageTags>shopping, api, reverse engineering</PackageTags>
     <PackageProjectUrl>https://github.com/kimipsen/NemligSharp/</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
 	  <EnablePackageValidation>true</EnablePackageValidation>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	  <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -26,13 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+    <None Include="..\README.md" Pack="true" PackagePath=""/>
+    <None Include="icon.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>
