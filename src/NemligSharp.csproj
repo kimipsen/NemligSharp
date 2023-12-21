@@ -9,6 +9,9 @@
     <Authors>Kim Ipsen</Authors>
     <Version>1.0.3</Version>
     <Description>A wrapper library for nemlig.com (online grocery shopping).</Description>
+    <PackageTags>shopping, api, reverse engineering</PackageTags>
+    <PackageProjectUrl>https://github.com/kimipsen/NemligSharp/</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <EnablePackageValidation>true</EnablePackageValidation>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	  <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -24,6 +27,10 @@
 
   <ItemGroup>
     <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
