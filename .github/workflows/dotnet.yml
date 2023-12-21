@@ -25,7 +25,4 @@ jobs:
 #    - name: Test
 #      run: dotnet test --no-build --verbosity normal
     - name: Publish
-      uses: brandedoutcast/publish-nuget@v2.5.5  
-      with:   
-        PROJECT_FILE_PATH: ./src/NemligSharp.csproj  
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}} 
+      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET_TOKEN }} --skip-duplicate --source https://api.nuget.org/v3/index.json
