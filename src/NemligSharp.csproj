@@ -9,9 +9,16 @@
     <Authors>Kim Ipsen</Authors>
     <Version>1.0.3</Version>
     <Description>A wrapper library for nemlig.com (online grocery shopping).</Description>
+	  <EnablePackageValidation>true</EnablePackageValidation>
+	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Flurl.Http" Version="4.0.0" />
   </ItemGroup>
 
