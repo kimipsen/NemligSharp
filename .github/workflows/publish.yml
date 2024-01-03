@@ -43,19 +43,20 @@ jobs:
 
   create_nuget:
     runs-on: ubuntu-latest
+    needs: [ calculate-version ]
+    env:
+      SEMVER: ${{ needs.calculate-version.outputs.semVer }}
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
-    - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ SEMVER }}
+    - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ env.SEMVER }}
     - uses: actions/upload-artifact@v3
       with:
         name: nuget
         if-no-files-found: error
         retention-days: 7
         path: ${{ env.NuGetDirectory }}/*.nupkg
-    env:
-      SEMVER: ${{ needs.calculate-version.outputs.semVer }}
 
   validate_nuget:
     runs-on: ubuntu-latest
