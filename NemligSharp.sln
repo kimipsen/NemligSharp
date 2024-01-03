@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NemligSharp", "src\NemligSharp.csproj", "{79996AF1-98C1-4F0B-B0AF-16BA96EEAEA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NemligSharp.Tests", "tests\NemligSharp.Tests.csproj", "{6124B29B-FED9-49EF-B3E9-847125F79CA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{79996AF1-98C1-4F0B-B0AF-16BA96EEAEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79996AF1-98C1-4F0B-B0AF-16BA96EEAEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79996AF1-98C1-4F0B-B0AF-16BA96EEAEA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6124B29B-FED9-49EF-B3E9-847125F79CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6124B29B-FED9-49EF-B3E9-847125F79CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6124B29B-FED9-49EF-B3E9-847125F79CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6124B29B-FED9-49EF-B3E9-847125F79CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
