@@ -29,7 +29,7 @@ jobs:
     name: Calculate Version
     runs-on: ubuntu-latest
     outputs:
-      semVer: ${{ steps.gitversion.outputs.semVer }}
+      semVer: ${{ steps.gitversion.outputs.fullSemVer }}
     steps:
       - uses: actions/checkout@v3
         with: 
@@ -50,6 +50,7 @@ jobs:
     env:
       SEMVER: ${{ needs.calculate-version.outputs.semVer }}
     steps:
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
     - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ env.SEMVER }}
