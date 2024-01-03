@@ -23,11 +23,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Flurl.Http" Version="4.0.0" />
+    <PackageReference Include="OneOf" Version="3.0.263" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
-    <None Include="..\README.md" Pack="true" PackagePath=""/>
-    <None Include="..\icon.png" Pack="true" PackagePath=""/>
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\README.md" Pack="true" PackagePath="" />
+    <None Include="..\icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

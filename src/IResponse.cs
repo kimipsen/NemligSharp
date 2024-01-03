@@ -4,7 +4,6 @@ namespace NemligSharp;
 
 public interface IResponse
 {
-    int StatusCode { get; }
 }
 
 public interface ISearchResponse : IResponse

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using OneOf;
 
 namespace NemligSharp;
 
@@ -9,17 +10,19 @@ public interface INemligClient
 
     // quick (GET, QueryString, "sæbe"): quick?query=s%C3%A6be&take=20&skip=0&recipeCount=2&
 
-    Task<ILoginResponse> LoginAsync(string userName, string password);
+    bool IsReady { get; }
 
-    Task<ICurrentUserResponse> GetCurrentUserAsync();
+    Task<OneOf<ILoginResponse, ErrorResponse>> LoginAsync(string userName, string password);
 
-    Task<IOrderHistoryResponse> GetOrderHistoryAsync(int skip, int take);
+    Task<OneOf<ICurrentUserResponse, ErrorResponse>> GetCurrentUserAsync();
 
-    Task<IOrderResponse> GetOrderAsync(int orderId);
+    Task<OneOf<IOrderHistoryResponse, ErrorResponse>> GetOrderHistoryAsync(int skip, int take);
 
-    Task<IShoppingListsResponse> GetShoppingListsAsync(int skip, int take);
+    Task<OneOf<IOrderResponse, ErrorResponse>> GetOrderAsync(int orderId);
 
-    Task<IShoppingListResponse> GetShoppingListAsync(int shoppingListId);
+    Task<OneOf<IShoppingListsResponse, ErrorResponse>> GetShoppingListsAsync(int skip, int take);
 
-    Task<ICurrentBasketResponse> GetCurrentBasketAsync();
+    Task<OneOf<IShoppingListResponse, ErrorResponse>> GetShoppingListAsync(int shoppingListId);
+
+    Task<OneOf<ICurrentBasketResponse, ErrorResponse>> GetCurrentBasketAsync();
 }
