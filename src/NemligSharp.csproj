@@ -1,34 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <PackageLicenseExpression></PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/kimipsen/NemligSharp/</RepositoryUrl>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Copyright>Kim Ipsen</Copyright>
-    <Authors>Kim Ipsen</Authors>
-    <Description>A wrapper library for nemlig.com (online grocery shopping).</Description>
-    <PackageTags>shopping, api, reverse engineering</PackageTags>
-    <PackageProjectUrl>https://github.com/kimipsen/NemligSharp/</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>icon.png</PackageIcon>
-	  <EnablePackageValidation>true</EnablePackageValidation>
-	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	  <NoWarn>$(NoWarn);CS1591</NoWarn>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<PackageLicenseExpression></PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/kimipsen/NemligSharp/</RepositoryUrl>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<Copyright>Kim Ipsen</Copyright>
+		<Authors>Kim Ipsen</Authors>
+		<Description>A wrapper library for nemlig.com (online grocery shopping).</Description>
+		<PackageTags>shopping, api, reverse engineering</PackageTags>
+		<PackageProjectUrl>https://github.com/kimipsen/NemligSharp/</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>icon.png</PackageIcon>
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Flurl.Http" Version="4.0.0" />
-    <PackageReference Include="OneOf" Version="3.0.263" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Flurl.Http" Version="4.0.0" />
+		<PackageReference Include="OneOf" Version="3.0.263" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath="" />
-    <None Include="..\README.md" Pack="true" PackagePath="" />
-    <None Include="..\icon.png" Pack="true" PackagePath="" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\LICENSE" Pack="true" PackagePath="" />
+		<None Include="..\README.md" Pack="true" PackagePath="" />
+		<None Include="..\icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 </Project>

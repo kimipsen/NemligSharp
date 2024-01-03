@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Flurl.Http;
 using OneOf;
@@ -8,13 +9,17 @@ namespace NemligSharp;
 public class NemligClient : INemligClient
 {
     public const string NemligBaseUrl = "https://www.nemlig.com/";
-    private readonly IFlurlClient _flurlClient = new FlurlClient(NemligBaseUrl);
-    private CookieJar _cookieJar = null;
+    private readonly FlurlClient _flurlClient = new(NemligBaseUrl);
+    private CookieJar? _cookieJar = null;
+    private LoginResponse? _loginResponse;
 
-    public bool IsReady => _cookieJar != null;
+    [MemberNotNullWhen(true, nameof(_loginResponse))]
+    public bool IsReady => _loginResponse != null;
 
     public async Task<OneOf<ILoginResponse, ErrorResponse>> LoginAsync(string userName, string password)
     {
+        if (IsReady) return _loginResponse;
+
         var payload = new LoginPayload(userName, password);
         var response = await _flurlClient.Request("webapi", "login").WithCookies(out var jar).PostJsonAsync(payload).ConfigureAwait(false);
 
@@ -22,11 +27,11 @@ public class NemligClient : INemligClient
         if (response.StatusCode != 200) return new UnknownErrorResponse();
 
         var jsonString = await response.GetStringAsync().ConfigureAwait(false);
-        var deserialized = JsonSerializer.Deserialize<LoginResponse>(jsonString);
+        _loginResponse = JsonSerializer.Deserialize<LoginResponse>(jsonString);
 
         _cookieJar = jar;
 
-        return deserialized;
+        return _loginResponse!;
     }
 
     public async Task<OneOf<ICurrentUserResponse, ErrorResponse>> GetCurrentUserAsync() => await DoFlurlGetV2<CurrentUserResponse, ICurrentUserResponse>(["webapi", "user", "GetCurrentUser"]).ConfigureAwait(false);
@@ -45,6 +50,8 @@ public class NemligClient : INemligClient
         where TResponseImplementation : Response, TResponseInterface
         where TResponseInterface : IResponse
     {
+        if (!IsReady) return new NotLoggedInErrorResponse();
+
         var response = await _flurlClient.Request(pathSegments).SetQueryParams(queryParameters).WithCookies(_cookieJar).GetAsync().ConfigureAwait(false);
 
         if (response.StatusCode == 404) return new NotFoundResponse();
