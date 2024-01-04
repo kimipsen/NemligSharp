@@ -1,5 +1,6 @@
 using Flurl.Http.Testing;
-using NemligSharp;
+
+namespace NemligSharp.Test;
 
 public class NemligClientTests
 {
@@ -15,7 +16,7 @@ public class NemligClientTests
         var password = "valid_password";
 
         // Act
-        var result = await client.LoginAsync(userName, password);
+        var result = await client.LoginAsync(userName, password, CancellationToken.None);
 
         // Assert
         Assert.IsAssignableFrom<ILoginResponse>(result.Value);
@@ -32,10 +33,10 @@ public class NemligClientTests
                 .RespondWithJson(new { RedirectUrl = "", MergeSuccessful = true, IsFirstLogin = false, IsExternalLogin = true }, 200)
                 .RespondWithJson(new { DebitorId = "", Email = "test-account@nemlig.com", MemberType = 1, MessageToDriver = "Go home!" }, 200);
         var client = new NemligClient();
-        await client.LoginAsync("valid_username", "valid_password");
+        await client.LoginAsync("valid_username", "valid_password", CancellationToken.None);
 
         // Act
-        var result = await client.GetCurrentUserAsync();
+        var result = await client.GetCurrentUserAsync(CancellationToken.None);
 
         // Assert
         Assert.IsAssignableFrom<ICurrentUserResponse>(result.Value);
@@ -52,12 +53,12 @@ public class NemligClientTests
                 .RespondWithJson(new { RedirectUrl = "", MergeSuccessful = true, IsFirstLogin = false, IsExternalLogin = true }, 200)
                 .RespondWithJson(new { }, 200);
         var client = new NemligClient();
-        await client.LoginAsync("valid_username", "valid_password");
+        await client.LoginAsync("valid_username", "valid_password", CancellationToken.None);
         var skip = 0;
         var take = 10;
 
         // Act
-        var result = await client.GetOrderHistoryAsync(skip, take);
+        var result = await client.GetOrderHistoryAsync(skip, take, CancellationToken.None);
 
         // Assert
         Assert.IsAssignableFrom<IOrderHistoryResponse>(result.Value);
@@ -75,7 +76,7 @@ public class NemligClientTests
         var password = "invalid_password";
 
         // Act
-        var result = await client.LoginAsync(userName, password);
+        var result = await client.LoginAsync(userName, password, CancellationToken.None);
 
         // Assert
         Assert.IsType<UnknownErrorResponse>(result.Value);
@@ -89,7 +90,7 @@ public class NemligClientTests
         var client = new NemligClient();
 
         // Act
-        var result = await client.GetCurrentUserAsync();
+        var result = await client.GetCurrentUserAsync(CancellationToken.None);
 
         // Assert
         Assert.IsType<NotLoggedInErrorResponse>(result.Value);

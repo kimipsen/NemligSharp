@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using OneOf;
 
 namespace NemligSharp;
@@ -12,17 +13,17 @@ public interface INemligClient
 
     bool IsReady { get; }
 
-    Task<OneOf<ILoginResponse, ErrorResponse>> LoginAsync(string userName, string password);
+    Task<OneOf<ILoginResponse, ErrorResponse>> LoginAsync(string userName, string password, CancellationToken cancellationToken);
 
-    Task<OneOf<ICurrentUserResponse, ErrorResponse>> GetCurrentUserAsync();
+    Task<OneOf<ICurrentUserResponse, ErrorResponse>> GetCurrentUserAsync(CancellationToken cancellationToken);
 
-    Task<OneOf<IOrderHistoryResponse, ErrorResponse>> GetOrderHistoryAsync(int skip, int take);
+    Task<OneOf<IOrderHistoryResponse, ErrorResponse>> GetOrderHistoryAsync(int skip, int take, CancellationToken cancellationToken);
 
-    Task<OneOf<IOrderResponse, ErrorResponse>> GetOrderAsync(int orderId);
+    Task<OneOf<IOrderResponse, ErrorResponse>> GetOrderAsync(int orderId, CancellationToken cancellationToken);
 
-    Task<OneOf<IShoppingListsResponse, ErrorResponse>> GetShoppingListsAsync(int skip, int take);
+    Task<OneOf<IShoppingListsResponse, ErrorResponse>> GetShoppingListsAsync(int skip, int take, CancellationToken cancellationToken);
 
-    Task<OneOf<IShoppingListResponse, ErrorResponse>> GetShoppingListAsync(int shoppingListId);
+    Task<OneOf<IShoppingListResponse, ErrorResponse>> GetShoppingListAsync(int shoppingListId, CancellationToken cancellationToken);
 
-    Task<OneOf<ICurrentBasketResponse, ErrorResponse>> GetCurrentBasketAsync();
+    Task<OneOf<ICurrentBasketResponse, ErrorResponse>> GetCurrentBasketAsync(CancellationToken cancellationToken);
 }

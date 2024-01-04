@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
 using OneOf;
@@ -16,7 +17,7 @@ public class NemligClient : INemligClient
     [MemberNotNullWhen(true, nameof(_loginResponse))]
     public bool IsReady => _loginResponse != null;
 
-    public async Task<OneOf<ILoginResponse, ErrorResponse>> LoginAsync(string userName, string password)
+    public async Task<OneOf<ILoginResponse, ErrorResponse>> LoginAsync(string userName, string password, CancellationToken cancellationToken)
     {
         if (IsReady) return _loginResponse;
 
@@ -25,7 +26,7 @@ public class NemligClient : INemligClient
             .AllowAnyHttpStatus()
             .Request("webapi", "login")
             .WithCookies(out var jar)
-            .PostJsonAsync(payload)
+            .PostJsonAsync(payload, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
         if (response.StatusCode == 404) return new NotFoundResponse();
@@ -46,30 +47,30 @@ public class NemligClient : INemligClient
         return _loginResponse!;
     }
 
-    public async Task<OneOf<ICurrentUserResponse, ErrorResponse>> GetCurrentUserAsync() => await DoFlurlGetV2<CurrentUserResponse, ICurrentUserResponse>(["webapi", "user", "GetCurrentUser"]).ConfigureAwait(false);
+    public async Task<OneOf<ICurrentUserResponse, ErrorResponse>> GetCurrentUserAsync(CancellationToken cancellationToken) => await DoFlurlGetV2<CurrentUserResponse, ICurrentUserResponse>(["webapi", "user", "GetCurrentUser"], cancellationToken).ConfigureAwait(false);
 
-    public async Task<OneOf<IOrderHistoryResponse, ErrorResponse>> GetOrderHistoryAsync(int skip, int take) => await DoFlurlGetV2<OrderHistoryResponse, IOrderHistoryResponse>(["webapi", "order", "GetBasicOrderHistory"], new { skip, take });
+    public async Task<OneOf<IOrderHistoryResponse, ErrorResponse>> GetOrderHistoryAsync(int skip, int take, CancellationToken cancellationToken) => await DoFlurlGetV2<OrderHistoryResponse, IOrderHistoryResponse>(["webapi", "order", "GetBasicOrderHistory"], cancellationToken, new { skip, take });
 
-    public async Task<OneOf<IOrderResponse, ErrorResponse>> GetOrderAsync(int orderId) => await DoFlurlGetV2<OrderResponse, IOrderResponse>(["webapi", "order", "GetOrderHistory"], new { orderNumber = orderId });
+    public async Task<OneOf<IOrderResponse, ErrorResponse>> GetOrderAsync(int orderId, CancellationToken cancellationToken) => await DoFlurlGetV2<OrderResponse, IOrderResponse>(["webapi", "order", "GetOrderHistory"], cancellationToken, new { orderNumber = orderId });
 
-    public async Task<OneOf<IShoppingListsResponse, ErrorResponse>> GetShoppingListsAsync(int skip, int take) => await DoFlurlGetV2<ShoppingListsResponse, IShoppingListsResponse>(["webapi", "ShoppingList", "GetShoppingLists"], new { skip, take });
+    public async Task<OneOf<IShoppingListsResponse, ErrorResponse>> GetShoppingListsAsync(int skip, int take, CancellationToken cancellationToken) => await DoFlurlGetV2<ShoppingListsResponse, IShoppingListsResponse>(["webapi", "ShoppingList", "GetShoppingLists"], cancellationToken, new { skip, take });
 
-    public async Task<OneOf<IShoppingListResponse, ErrorResponse>> GetShoppingListAsync(int shoppingListId) => await DoFlurlGetV2<ShoppingListResponse, IShoppingListResponse>(["webapi", "ShoppingList", "GetShoppingList"], new { listId = shoppingListId });
+    public async Task<OneOf<IShoppingListResponse, ErrorResponse>> GetShoppingListAsync(int shoppingListId, CancellationToken cancellationToken) => await DoFlurlGetV2<ShoppingListResponse, IShoppingListResponse>(["webapi", "ShoppingList", "GetShoppingList"], cancellationToken, new { listId = shoppingListId });
 
-    public async Task<OneOf<ICurrentBasketResponse, ErrorResponse>> GetCurrentBasketAsync() => await DoFlurlGetV2<CurrentBasketResponse, ICurrentBasketResponse>(["webapi", "basket", "GetBasket"]);
+    public async Task<OneOf<ICurrentBasketResponse, ErrorResponse>> GetCurrentBasketAsync(CancellationToken cancellationToken) => await DoFlurlGetV2<CurrentBasketResponse, ICurrentBasketResponse>(["webapi", "basket", "GetBasket"], cancellationToken);
 
-    private async Task<OneOf<TResponseInterface, ErrorResponse>> DoFlurlGetV2<TResponseImplementation, TResponseInterface>(string[] pathSegments, object queryParameters = null)
+    private async Task<OneOf<TResponseInterface, ErrorResponse>> DoFlurlGetV2<TResponseImplementation, TResponseInterface>(string[] pathSegments, CancellationToken cancellationToken, object queryParameters = null)
         where TResponseImplementation : Response, TResponseInterface
         where TResponseInterface : IResponse
     {
         if (!IsReady) return new NotLoggedInErrorResponse();
 
-        var response = await _flurlClient.Request(pathSegments).SetQueryParams(queryParameters).WithCookies(_cookieJar).GetAsync().ConfigureAwait(false);
+        var response = await _flurlClient.Request(pathSegments).SetQueryParams(queryParameters).WithCookies(_cookieJar).GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
         if (response.StatusCode == 404) return new NotFoundResponse();
         if (response.StatusCode != 200) return new UnknownErrorResponse();
 
         var jsonString = await response.GetStringAsync().ConfigureAwait(false);
-        return JsonSerializer.Deserialize<TResponseImplementation>(jsonString);
+        return JsonSerializer.Deserialize<TResponseImplementation>(jsonString)!;
     }
 }
