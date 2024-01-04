@@ -70,7 +70,7 @@ public class NemligClientTests
     {
         // Arrange
         using var httpTest = new HttpTest();
-        httpTest.ForCallsTo("*.nemlig.com*").RespondWithJson(new {  }, 400);
+        httpTest.ForCallsTo("*.nemlig.com*").RespondWithJson(new { }, 400);
         var client = new NemligClient();
         var userName = "invalid_username";
         var password = "invalid_password";
