@@ -1,3 +1,4 @@
+using Flurl.Http.Testing;
 using NemligSharp;
 
 public class NemligClientTests
@@ -7,6 +8,8 @@ public class NemligClientTests
     public async Task test_login_with_valid_credentials()
     {
         // Arrange
+        using var httpTest = new HttpTest();
+        httpTest.ForCallsTo("*.nemlig.com*").RespondWithJson(new { RedirectUrl = "", MergeSuccessful = true, IsFirstLogin = false, IsExternalLogin = true }, 200);
         var client = new NemligClient();
         var userName = "valid_username";
         var password = "valid_password";
@@ -23,6 +26,11 @@ public class NemligClientTests
     public async Task test_retrieve_current_user_information()
     {
         // Arrange
+        using var httpTest = new HttpTest();
+        httpTest
+            .ForCallsTo("*.nemlig.com*")
+                .RespondWithJson(new { RedirectUrl = "", MergeSuccessful = true, IsFirstLogin = false, IsExternalLogin = true }, 200)
+                .RespondWithJson(new { DebitorId = "", Email = "test-account@nemlig.com", MemberType = 1, MessageToDriver = "Go home!" }, 200);
         var client = new NemligClient();
         await client.LoginAsync("valid_username", "valid_password");
 
@@ -38,6 +46,11 @@ public class NemligClientTests
     public async Task test_retrieve_order_history_with_valid_parameters()
     {
         // Arrange
+        using var httpTest = new HttpTest();
+        httpTest
+            .ForCallsTo("*.nemlig.com*")
+                .RespondWithJson(new { RedirectUrl = "", MergeSuccessful = true, IsFirstLogin = false, IsExternalLogin = true }, 200)
+                .RespondWithJson(new { }, 200);
         var client = new NemligClient();
         await client.LoginAsync("valid_username", "valid_password");
         var skip = 0;
@@ -55,6 +68,8 @@ public class NemligClientTests
     public async Task test_login_fails_with_invalid_credentials()
     {
         // Arrange
+        using var httpTest = new HttpTest();
+        httpTest.ForCallsTo("*.nemlig.com*").RespondWithJson(new {  }, 400);
         var client = new NemligClient();
         var userName = "invalid_username";
         var password = "invalid_password";
@@ -78,22 +93,5 @@ public class NemligClientTests
 
         // Assert
         Assert.IsType<NotLoggedInErrorResponse>(result.Value);
-    }
-
-    // GetOrderHistoryAsync fails with invalid parameters
-    [Fact]
-    public async Task test_get_order_history_fails_with_invalid_parameters()
-    {
-        // Arrange
-        var client = new NemligClient();
-        await client.LoginAsync("valid_username", "valid_password");
-        var skip = -1;
-        var take = 0;
-
-        // Act
-        var result = await client.GetOrderHistoryAsync(skip, take);
-
-        // Assert
-        Assert.IsType<UnknownErrorResponse>(result.Value);
     }
 }

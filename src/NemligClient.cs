@@ -21,13 +21,25 @@ public class NemligClient : INemligClient
         if (IsReady) return _loginResponse;
 
         var payload = new LoginPayload(userName, password);
-        var response = await _flurlClient.Request("webapi", "login").WithCookies(out var jar).PostJsonAsync(payload).ConfigureAwait(false);
+        var response = await _flurlClient
+            .AllowAnyHttpStatus()
+            .Request("webapi", "login")
+            .WithCookies(out var jar)
+            .PostJsonAsync(payload)
+            .ConfigureAwait(false);
 
         if (response.StatusCode == 404) return new NotFoundResponse();
         if (response.StatusCode != 200) return new UnknownErrorResponse();
 
         var jsonString = await response.GetStringAsync().ConfigureAwait(false);
-        _loginResponse = JsonSerializer.Deserialize<LoginResponse>(jsonString);
+
+        try {
+            _loginResponse = JsonSerializer.Deserialize<LoginResponse>(jsonString);
+        }
+        catch (JsonException jexc)
+        {
+            return new JsonParseErrorResponse(jexc.Message);
+        }
 
         _cookieJar = jar;
 
