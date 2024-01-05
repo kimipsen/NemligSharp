@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using OneOf;
@@ -21,19 +22,35 @@ public static class Extensions
             if (orderHistory.TryPickT0(out var orderHistoryResponse, out var orderHistoryErrorResponse))
             {
                 numberOfPages = orderHistoryResponse.NumberOfPages;
-                foreach (var order in orderHistoryResponse.Orders)
-                {
-                    var orderDetails = await client.GetOrderAsync(order.Id, cancellationToken).ConfigureAwait(false);
-                    if (orderDetails.TryPickT0(out var orderDetailsResponse, out var orderDetailsErrorResponse))
-                        responses.Add(orderDetailsResponse);
-                    else
-                        return orderDetailsErrorResponse;
-                }
+                var orderDetails = await client.GetAllOrderDetailsAsync(orderHistoryResponse.Orders.Select(o => o.Id), cancellationToken).ConfigureAwait(false);
+
+                if (orderDetails.TryPickT0(out var orderDetailsResponse, out var orderDetailsErrorResponse))
+                    responses.AddRange(orderDetailsResponse);
+                else
+                    return orderDetailsErrorResponse;
             }
             else
                 return orderHistoryErrorResponse;
             currentPage++;
         } while (currentPage < numberOfPages);
+
+        return responses.AsReadOnly();
+    }
+
+    public static async Task<OneOf<IList<IOrderResponse>, ErrorResponse>> GetAllOrderDetailsAsync(this INemligClient client, IEnumerable<int> orderIds, CancellationToken cancellationToken)
+    {
+        if (!client.IsReady) return new List<IOrderResponse>().AsReadOnly();
+
+        List<IOrderResponse> responses = [];
+
+        foreach (var orderId in orderIds)
+        {
+            var orderDetails = await client.GetOrderAsync(orderId, cancellationToken).ConfigureAwait(false);
+            if (orderDetails.TryPickT0(out var orderDetailsResponse, out var orderDetailsErrorResponse))
+                responses.Add(orderDetailsResponse);
+            else
+                return orderDetailsErrorResponse;
+        }
 
         return responses.AsReadOnly();
     }
