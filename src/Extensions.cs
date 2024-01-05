@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using OneOf;
@@ -9,11 +8,11 @@ namespace NemligSharp;
 public static class Extensions
 {
     private const int PageSize = 25;
-    public static async Task<OneOf<IList<IOrderResponse>, ErrorResponse>> GetAllOrderDetailsAsync(this INemligClient client, CancellationToken cancellationToken)
+    public static async Task<OneOf<IList<Order>, ErrorResponse>> GetAllOrdersWithDetailsAsync(this INemligClient client, CancellationToken cancellationToken)
     {
-        if (!client.IsReady) return new List<IOrderResponse>().AsReadOnly();
+        if (!client.IsReady) return new NotLoggedInErrorResponse();
 
-        List<IOrderResponse> responses = [];
+        List<Order> responses = [];
         int currentPage = 0;
         int numberOfPages = 0;
         do
@@ -22,7 +21,7 @@ public static class Extensions
             if (orderHistory.TryPickT0(out var orderHistoryResponse, out var orderHistoryErrorResponse))
             {
                 numberOfPages = orderHistoryResponse.NumberOfPages;
-                var orderDetails = await client.GetAllOrderDetailsAsync(orderHistoryResponse.Orders.Select(o => o.Id), cancellationToken).ConfigureAwait(false);
+                var orderDetails = await client.GetAllOrderDetailsAsync(orderHistoryResponse.Orders, cancellationToken).ConfigureAwait(false);
 
                 if (orderDetails.TryPickT0(out var orderDetailsResponse, out var orderDetailsErrorResponse))
                     responses.AddRange(orderDetailsResponse);
@@ -37,17 +36,20 @@ public static class Extensions
         return responses.AsReadOnly();
     }
 
-    public static async Task<OneOf<IList<IOrderResponse>, ErrorResponse>> GetAllOrderDetailsAsync(this INemligClient client, IEnumerable<int> orderIds, CancellationToken cancellationToken)
+    public static async Task<OneOf<IList<Order>, ErrorResponse>> GetAllOrderDetailsAsync(this INemligClient client, IEnumerable<Order> orders, CancellationToken cancellationToken)
     {
-        if (!client.IsReady) return new List<IOrderResponse>().AsReadOnly();
+        if (!client.IsReady) return new NotLoggedInErrorResponse();
 
-        List<IOrderResponse> responses = [];
+        List<Order> responses = [];
 
-        foreach (var orderId in orderIds)
+        foreach (var order in orders)
         {
-            var orderDetails = await client.GetOrderAsync(orderId, cancellationToken).ConfigureAwait(false);
+            var orderDetails = await client.GetOrderAsync(order.Id, cancellationToken).ConfigureAwait(false);
             if (orderDetails.TryPickT0(out var orderDetailsResponse, out var orderDetailsErrorResponse))
-                responses.Add(orderDetailsResponse);
+            {
+                var orderWithDetails = order with { OrderDetails = orderDetailsResponse };
+                responses.Add(orderWithDetails);
+            }
             else
                 return orderDetailsErrorResponse;
         }

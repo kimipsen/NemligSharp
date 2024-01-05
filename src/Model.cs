@@ -2,7 +2,7 @@
 
 namespace NemligSharp;
 
-public record Order(string OrderNumber, decimal Total, int Id, DeliveryTime DeliveryTime, string DeliveryAddress, bool IsDeliveryOnWay, DeliveryType DeliveryType);
+public record Order(string OrderNumber, decimal Total, int Id, DeliveryTime DeliveryTime, string DeliveryAddress, bool IsDeliveryOnWay, DeliveryType DeliveryType, IOrderResponse OrderDetails);
 public record DeliveryTime(DateTime Start, DateTime End);
 public record OrderLine(string GroupName, string ProductNumber, string ProductName, string RecipeId, int Quantity, string Description, decimal AverageItemPrice, decimal Amount);
 public record GdprSettings(int NewslettersIntegrationId, int RecipesIntegrationId, int SmsNotificationsIntegrationId, int NemligAdsOnSearchEnginesIntegrationId, int NemligAdsOnOtherSitesIntegrationId, int SurveysIntegrationId);
@@ -16,5 +16,5 @@ public record CouponLine(string Type, string Name, string CouponNumber);
 public enum DeliveryType
 {
     Personal = 0,
-    Flexible = 1,
+    Flex = 1,
 }
