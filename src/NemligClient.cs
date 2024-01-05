@@ -34,7 +34,8 @@ public class NemligClient : INemligClient
 
         var jsonString = await response.GetStringAsync().ConfigureAwait(false);
 
-        try {
+        try
+        {
             _loginResponse = JsonSerializer.Deserialize<LoginResponse>(jsonString);
         }
         catch (JsonException jexc)
@@ -59,7 +60,7 @@ public class NemligClient : INemligClient
 
     public async Task<OneOf<ICurrentBasketResponse, ErrorResponse>> GetCurrentBasketAsync(CancellationToken cancellationToken) => await DoFlurlGetV2<CurrentBasketResponse, ICurrentBasketResponse>(["webapi", "basket", "GetBasket"], cancellationToken);
 
-    private async Task<OneOf<TResponseInterface, ErrorResponse>> DoFlurlGetV2<TResponseImplementation, TResponseInterface>(string[] pathSegments, CancellationToken cancellationToken, object queryParameters = null)
+    private async Task<OneOf<TResponseInterface, ErrorResponse>> DoFlurlGetV2<TResponseImplementation, TResponseInterface>(string[] pathSegments, CancellationToken cancellationToken, object? queryParameters = null)
         where TResponseImplementation : Response, TResponseInterface
         where TResponseInterface : IResponse
     {
