@@ -7,8 +7,6 @@ namespace NemligSharp;
 public interface INemligClient
 {
     // search (GET, QueryString, "sæbe"/"s%C3%A6be"): search?query=s%C3%A6be&take=20&skip=0&recipeCount=2&search=s%C3%A6be&sortorder=default
-    //ISearchResponse SearchAsync(string searchString);
-
     // quick (GET, QueryString, "sæbe"): quick?query=s%C3%A6be&take=20&skip=0&recipeCount=2&
 
     bool IsReady { get; }
