@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
 		<PackageLicenseExpression></PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/kimipsen/NemligSharp/</RepositoryUrl>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -15,16 +14,15 @@
 		<EnablePackageValidation>true</EnablePackageValidation>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);CS1591</NoWarn>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+		<PackageReference Include="DotNet.ReproducibleBuilds">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Flurl.Http" Version="4.0.2" />
-		<PackageReference Include="OneOf" Version="3.0.263" />
+		<PackageReference Include="Flurl.Http" />
+		<PackageReference Include="OneOf" />
 	</ItemGroup>
 
 	<ItemGroup>

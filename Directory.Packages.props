@@ -1,0 +1,25 @@
+<!-- For more info on central package management go to
+https://devblogs.microsoft.com/nuget/introducing-central-package-management/ -->
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageVersion>
+        <PackageVersion Include="Flurl.Http" Version="4.0.2" />
+        <PackageVersion Include="OneOf" Version="3.0.263" />
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+        <PackageVersion Include="xunit" Version="2.7.0" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageVersion>
+        <PackageVersion Include="coverlet.collector" Version="6.0.1">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageVersion>
+    </ItemGroup>
+</Project>
