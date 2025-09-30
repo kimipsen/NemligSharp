@@ -5,7 +5,7 @@ https://devblogs.microsoft.com/nuget/introducing-central-package-management/ -->
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
     <ItemGroup>
-        <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25">
+        <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.39">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
